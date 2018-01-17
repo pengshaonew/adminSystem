@@ -20,6 +20,10 @@ export function init() {
                 dispatch({
                     type: LOGIN_STATUS,
                     status: '登录成功'
+                });
+                Modal.success({
+                    title: '请求成功',
+                    content: ''
                 })
             }
         });

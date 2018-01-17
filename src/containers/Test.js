@@ -20,15 +20,17 @@ class Test extends React.Component {
     handleAdd = () => {
         let {add, users} = this.props;
         let {userName} = this.state;
-        let flag = users.some(item => {
-            return item.userName === userName;
-        });
-        if (!flag) {
-            add(userName);
-        } else {
-            this.setState({
-                message: '用户名已存在'
-            })
+        if(!!userName){
+            let flag = users.some(item => {
+                return item.userName === userName;
+            });
+            if (!flag) {
+                add(userName);
+            } else {
+                this.setState({
+                    message: '用户名已存在'
+                })
+            }
         }
     };
     handleChange = (e) => {
