@@ -16,7 +16,7 @@ export function init() {
             },
             body: JSON.stringify({username: 'zhaoadmin@6112', password: 'qwer1234'})
         }).then(response => {
-            if (response.status == '200') {
+            if (response.status === '200') {
                 dispatch({
                     type: LOGIN_STATUS,
                     status: '登录成功'
