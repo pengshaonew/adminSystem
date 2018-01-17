@@ -14,12 +14,12 @@ export function init() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({username: 'zhaoadmin@6112', password: 'qwer1234'})
+            body: JSON.stringify({username: 'zhaoadmin', password: '1234'})
         }).then(response => {
             if (response.status === '200') {
                 dispatch({
                     type: LOGIN_STATUS,
-                    status: '登录成功'
+                    status: '请求成功'
                 });
                 Modal.success({
                     title: '请求成功',
