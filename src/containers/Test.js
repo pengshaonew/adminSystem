@@ -59,7 +59,7 @@ class Test extends React.Component {
                         this.state.message
                     }
                 </span>
-                <div>{loginStatus}</div>
+                <div>{ loginStatus }</div>
                 {
                     users.length > 0 && users.map((item, index) => {
                         return <dl key={index}>
