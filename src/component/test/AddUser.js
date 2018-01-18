@@ -12,6 +12,12 @@ class AddUser extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        if(!nextProps.isAddUser){
+            this.props.form.resetFields();
+        }
+    }
+
     handSubmit = () => {
         this.props.form.validateFields(
             (err, values) => {
@@ -23,33 +29,36 @@ class AddUser extends React.Component {
                             return item.userName === userName;
                         });
                         if (!flag) {
-                            values.id=Date.now();
+                            values.id = Date.now();
                             add(values);
                             handleCancel('isAddUser');
-                        } else {
-                            this.setState({
-                                message: '用户名已存在'
-                            })
                         }
                     }
-                    this.props.form.resetFields();
                 }
             }
         );
 
     };
     // 校验名称是否重复
-    nameExists(rule, value, callback) {
+    nameExists = (rule, value, callback) => {
         if (!value) {
             callback();
         } else {
             if (!(/^[\w|\u4e00-\u9fa5]+$/.test(value))) {
                 callback(new Error('名称必须是由数字、字母、下划线或文字组成'));
-            }else {
-                callback();
+            } else {
+                let flag = this.props.users.some(item => {
+                    return item.userName === value;
+                });
+                if (flag) {
+                    callback(new Error('用户名重复,请重新输入'));
+                } else {
+                    callback();
+                }
             }
         }
     }
+
     render() {
         const {getFieldDecorator} = this.props.form;
         let {loginStatus, isAddUser, handleCancel} = this.props;

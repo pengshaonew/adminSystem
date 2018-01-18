@@ -7,7 +7,7 @@ export default class App extends Component {
     render() {
         return (
             <Router history={createBrowserHistory()}>
-                <div style={{margin:10}}>
+                <div style={{padding:10}}>
                     <Switch>
                         <Route path="/" component={User} ></Route>
                     </Switch>

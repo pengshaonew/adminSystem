@@ -47,6 +47,9 @@ class User extends React.Component {
         };
         return (
             <div>
+                <div>
+                    {loginStatus}
+                </div>
                 <Table
                     size="small"
                     title={title}
