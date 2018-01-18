@@ -30,12 +30,9 @@ export function init() {
     }
 }
 
-export function add(val) {
+export function add(data) {
     return {
         type: ADD,
-        data: {
-            userName: val,
-            id: Date.now()
-        }
+        data
     }
 }

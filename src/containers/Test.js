@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {
     add, init,
-} from '../action/testAction'
+} from '../action/userAction'
 class Test extends React.Component {
     constructor() {
         super();

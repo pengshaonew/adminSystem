@@ -4,7 +4,7 @@
 import {
     LOGIN_STATUS,
     ADD
-} from '../action/testAction'
+} from '../action/userAction'
 let initState = {
     users: [],
     loginStatus: '登录中...'
