@@ -3,6 +3,8 @@
  */
 import 'isomorphic-fetch'
 export const ADD = 'ADD';
+export const DEL = 'DEL';
+export const UPDATE = 'UPDATE';
 export const LOGIN_STATUS = 'LOGIN_STATUS';
 
 export function init() {
@@ -19,6 +21,20 @@ export function init() {
 export function add(data) {
     return {
         type: ADD,
+        data
+    }
+}
+
+export function delUser(data) {
+    return {
+        type: DEL,
+        data
+    }
+}
+
+export function updateUser(data) {
+    return {
+        type: UPDATE,
         data
     }
 }
