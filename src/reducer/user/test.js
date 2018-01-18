@@ -8,6 +8,7 @@ import {
     UPDATE,
 } from '../../action/userAction'
 let initState = {
+    loading: false,
     users: [],
     loginStatus: '登录中...'
 };
@@ -15,23 +16,22 @@ export function test(state = initState, action) {
     let {data} = action;
     switch (action.type) {
         case LOGIN_STATUS:
-            let loginState = state;
-            return {...loginState, loginStatus: action.status};
+            return {...state, loginStatus: action.status};
         case ADD:
-            return {...state, users: [...state.users, data]};
+            return {...state, users: [...state.users, data], loading: false};
         case DEL:
             let delUsers = state.users;
             delUsers = delUsers.filter(item => item.id !== data.id);
-            return {...state, users: [...delUsers]};
+            return {...state, users: [...delUsers], loading: false};
         case UPDATE:
             let updateUsers = state.users;
             updateUsers = updateUsers.map(item => {
-                if(item.id === data.id){
-                    item.userName=data.userName;
+                if (item.id === data.id) {
+                    item.userName = data.userName;
                 }
                 return item;
             });
-            return {...state, users: [...updateUsers]};
+            return {...state, users: [...updateUsers], loading: false};
         default:
             return state;
     }

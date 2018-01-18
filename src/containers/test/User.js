@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import {Table, Popconfirm, Button, Divider} from 'antd'
+import {Table,Spin, Popconfirm, Button, Divider} from 'antd'
 import {
     add, init, delUser, updateUser,
 } from '../../action/userAction'
@@ -69,7 +69,7 @@ class User extends React.Component {
     };
 
     render() {
-        let {users, add, updateUser,loginStatus} = this.props;
+        let {loading,users, add, updateUser,loginStatus} = this.props;
         let title = () => {
             return <Button type="primary" onClick={this.handleOk.bind(null, 'isAddUser')}>新建账户</Button>
         };
@@ -78,12 +78,14 @@ class User extends React.Component {
                 <div>
                     {loginStatus}
                 </div>
-                <Table
-                    size="small"
-                    title={title}
-                    columns={this.state.columns}
-                    dataSource={users}
-                />
+                <Spin spinning={loading}>
+                    <Table
+                        size="small"
+                        title={title}
+                        columns={this.state.columns}
+                        dataSource={users}
+                    />
+                </Spin>
                 <AddUser
                     isAddUser={this.state.isAddUser}
                     updateRecord={this.state.updateRecord}
@@ -100,6 +102,7 @@ class User extends React.Component {
 let mapStateToAppProps = state => {
     let testState = state.test;
     return {
+        loading: testState.loading,
         users: testState.users,
         loginStatus: testState.loginStatus
     }

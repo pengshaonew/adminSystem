@@ -27,8 +27,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "theme": {
-    "primary-color": "#1DA57A"
-  },
   "proxy": "http://118.31.112.168:10009"
 }
