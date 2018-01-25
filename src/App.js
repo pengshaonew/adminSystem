@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Switch,Router, Route,BrowserRouter} from 'react-router-dom';
 import createBrowserHistory  from 'history/createBrowserHistory'
 import User from './containers/test/User'
-import './App.css';
+import './App.less';
 export default class App extends Component {
     render() {
         return (
