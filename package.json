@@ -59,7 +59,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "dev": "webpack-dev-server --devtool eval --progress --colors --content-base build"
   },
   "proxy": "http://118.31.112.168:10009",
   "jest": {
@@ -105,7 +106,11 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "babel-loader": "^7.1.2",
+    "css-loader": "^0.28.7",
     "less": "^2.7.3",
-    "less-loader": "^4.0.5"
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.19.0",
+    "url-loader": "^0.6.2"
   }
 }
