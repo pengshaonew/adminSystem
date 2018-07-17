@@ -12,7 +12,7 @@ let initState = {
     users: [],
     loginStatus: '登录中...'
 };
-export function test(state = initState, action) {
+export function user(state = initState, action) {
     let {data} = action;
     switch (action.type) {
         case LOGIN_STATUS:

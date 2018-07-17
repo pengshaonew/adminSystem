@@ -1,7 +1,9 @@
 import React from 'react';
 import {Modal, Form, Input} from 'antd';
+
 const FormItem = Form.Item;
 const createForm = Form.create;
+
 class AddUser extends React.Component {
     constructor() {
         super();
@@ -44,7 +46,7 @@ class AddUser extends React.Component {
                         values.id = Date.now() + '';
                         add(values);
                     }
-                    handleCancel('isAddUser');
+                    handleCancel();
                 }
             }
         );
@@ -58,9 +60,9 @@ class AddUser extends React.Component {
             if (!(/^[\w|\u4e00-\u9fa5]+$/.test(value))) {
                 callback(new Error('名称必须是由数字、字母、下划线或文字组成'));
             } else {
-                let {users}=this.props;
+                let {users, updateRecord} = this.props;
                 let flag = users.some(item => {
-                    return item.userName === value;
+                    return (item.userName === value && item.id !== updateRecord.id);
                 });
                 if (flag) {
                     callback(new Error('用户名重复,请重新输入'));
@@ -82,10 +84,10 @@ class AddUser extends React.Component {
             <Modal
                 title={this.state.title}
                 visible={isAddUser}
-                onCancel={handleCancel.bind(null, 'isAddUser')}
+                onCancel={handleCancel}
                 onOk={this.handSubmit}
             >
-                <Form >
+                <Form>
                     <FormItem {...formItemLayout1} label="用户名称">
                         {getFieldDecorator('userName', {
                             rules: [{required: true, message: '请输入用户名称'},
@@ -95,7 +97,7 @@ class AddUser extends React.Component {
                         )}
                     </FormItem>
                 </Form>
-                <div>{ loginStatus }</div>
+                <div>{loginStatus}</div>
             </Modal>
         );
     }

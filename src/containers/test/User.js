@@ -5,6 +5,7 @@ import {
     add, init, delUser, updateUser,
 } from '../../action/userAction'
 import AddUser from "../../component/test/AddUser";
+import {user} from "../../reducer/user/user";
 class User extends React.Component {
     constructor() {
         super();
@@ -47,14 +48,14 @@ class User extends React.Component {
         init();
     }
 
-    handleOk = (attr) => {
+    handleOk = attr => {
         this.setState({
             [attr]: true
         })
     };
-    handleCancel = (attr) => {
+    handleCancel = () => {
         this.setState({
-            [attr]: false,
+            isAddUser: false,
             updateRecord: false
         })
     };
@@ -100,7 +101,7 @@ class User extends React.Component {
 }
 
 let mapStateToAppProps = state => {
-    let testState = state.test;
+    let testState = state.user;
     return {
         loading: testState.loading,
         users: testState.users,
