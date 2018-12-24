@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {
     add, init,
 } from '../action/userAction'
+import './test.less'
 class Test extends React.Component {
     constructor() {
         super();

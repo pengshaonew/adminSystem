@@ -5,7 +5,8 @@ import {
     add, init, delUser, updateUser,
 } from '../../action/userAction'
 import AddUser from "../../component/test/AddUser";
-import {user} from "../../reducer/user/user";
+import './user.less'
+
 class User extends React.Component {
     constructor() {
         super();
@@ -75,7 +76,7 @@ class User extends React.Component {
             return <Button type="primary" onClick={this.handleOk.bind(null, 'isAddUser')}>新建账户</Button>
         };
         return (
-            <div>
+            <div className={'box'}>
                 <div>
                     {loginStatus}
                 </div>
