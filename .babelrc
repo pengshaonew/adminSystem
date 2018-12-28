@@ -1,0 +1,12 @@
+{
+    "presets": [
+        "es2015",
+        "stage-0",
+        "react",
+        "flow"
+    ],
+    "plugins": [
+        ["import", { "libraryName": "antd", "libraryDirectory": "lib"}, "antd"],
+        ["transform-class-properties"]
+    ]
+}

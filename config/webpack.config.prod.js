@@ -106,6 +106,18 @@ module.exports = {
     },
     module: {
         strictExportPresence: true,
+        loaders:[
+            {
+                test: /\.(js|jsx)$/,
+                include: paths.appSrc,
+                loader: 'babel',
+                query: {
+                    plugins: [
+                        ['import', [{ libraryName: "antd", style: true }]],
+                    ]
+                }
+            },
+        ],
         rules: [
             // TODO: Disable require.ensure as it's not a standard language feature.
             // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.

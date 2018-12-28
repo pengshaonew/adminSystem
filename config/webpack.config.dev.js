@@ -100,6 +100,22 @@ module.exports = {
     },
     module: {
         strictExportPresence: true,
+        loaders:[
+            {
+                test: /\.(js|jsx)$/,
+                include: paths.appSrc,
+                loader: 'babel',
+                query: {
+                    plugins: [
+                        ['import', [{ libraryName: "antd", style: true }]],
+                    ],
+                    // This is a feature of `babel-loader` for webpack (not Babel itself).
+                    // It enables caching results in ./node_modules/.cache/babel-loader/
+                    // directory for faster rebuilds.
+                    cacheDirectory: true
+                }
+            },
+        ],
         rules: [
             // TODO: Disable require.ensure as it's not a standard language feature.
             // We are waiting for https://github.com/facebookincubator/create-react-app/issues/2176.

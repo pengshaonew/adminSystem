@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Switch,Router, Route,BrowserRouter} from 'react-router-dom';
+import {Switch,Router, Route} from 'react-router-dom';
 import createBrowserHistory  from 'history/createBrowserHistory'
 import User from './containers/test/User'
 import './App.less';
@@ -9,7 +9,7 @@ export default class App extends Component {
             <Router history={createBrowserHistory()}>
                 <div style={{padding:10}}>
                     <Switch>
-                        <Route path="/" component={User} ></Route>
+                        <Route path="/" component={User} />
                     </Switch>
                 </div>
             </Router>
