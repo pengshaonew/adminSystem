@@ -2,19 +2,20 @@
  * Created by zsp on 2018/1/8.
  */
 import 'isomorphic-fetch'
+import {fetchData} from '../utils/fetchServe'
 export const ADD = 'ADD';
 export const DEL = 'DEL';
 export const UPDATE = 'UPDATE';
-export const LOGIN_STATUS = 'LOGIN_STATUS';
+export const USER_GET_DATA_LIST = 'USER_GET_DATA_LIST';
 
-export function init() {
+export function getCommodity(params) {
     return dispatch => {
-        setTimeout(()=>{
+        fetchData(`/userList`,params).then(res=>{
             dispatch({
-                type: LOGIN_STATUS,
-                status: '请求成功'
-            });
-        },2000)
+                type:USER_GET_DATA_LIST,
+                data:res
+            })
+        })
     }
 }
 

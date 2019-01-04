@@ -17,6 +17,9 @@ class Test extends React.Component {
         let {init} = this.props;
         init();
     }
+    async function init(){
+
+    }
 
     handleAdd = () => {
         let {add, users} = this.props;

@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {Table,Spin, Popconfirm, Button, Divider} from 'antd'
 import {
-    add, init, delUser, updateUser,
+    add, delUser, updateUser,getCommodity,
 } from '../../action/userAction'
 import AddUser from "../../component/test/AddUser";
 import './user.less'
@@ -45,8 +45,8 @@ class User extends React.Component {
     }
 
     componentWillMount() {
-        let {init} = this.props;
-        init();
+        let {getCommodity} = this.props;
+        getCommodity({a:123});
     }
 
     handleOk = attr => {
@@ -71,18 +71,16 @@ class User extends React.Component {
     };
 
     render() {
-        let {loading,users, add, updateUser,loginStatus} = this.props;
+        let {loading,users, add, updateUser} = this.props;
         let title = () => {
             return <Button type="primary" onClick={this.handleOk.bind(null, 'isAddUser')}>新建账户</Button>
         };
         return (
             <div className={'box'}>
-                <div>
-                    {loginStatus}
-                </div>
                 <Spin spinning={loading}>
                     <Table
                         size="small"
+                        rowKey={record => record.id}
                         title={title}
                         columns={this.state.columns}
                         dataSource={users}
@@ -106,9 +104,8 @@ let mapStateToAppProps = state => {
     return {
         loading: testState.loading,
         users: testState.users,
-        loginStatus: testState.loginStatus
     }
 };
 export default connect(mapStateToAppProps, {
-    add, init, delUser, updateUser,
+    add,delUser, updateUser, getCommodity,
 })(User);

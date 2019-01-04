@@ -2,21 +2,18 @@
  * Created by zsp on 2018/1/8.
  */
 import {
-    LOGIN_STATUS,
     ADD,
     DEL,
     UPDATE,
+    USER_GET_DATA_LIST,
 } from '../../action/userAction'
 let initState = {
     loading: false,
-    users: [],
-    loginStatus: '登录中...'
+    users: []
 };
 export function user(state = initState, action) {
-    let {data} = action;
-    switch (action.type) {
-        case LOGIN_STATUS:
-            return {...state, loginStatus: action.status};
+    let {type,data} = action;
+    switch (type) {
         case ADD:
             return {...state, users: [...state.users, data], loading: false};
         case DEL:
@@ -32,6 +29,8 @@ export function user(state = initState, action) {
                 return item;
             });
             return {...state, users: [...updateUsers], loading: false};
+        case USER_GET_DATA_LIST:
+            return {...state, users: [...data], loading: false};
         default:
             return state;
     }
