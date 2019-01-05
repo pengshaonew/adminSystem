@@ -5,7 +5,6 @@ import {
     addCommodity,delCommodity, updateCommodity,getCommodity,
 } from '../../action/commodityAction'
 import AddUser from "../../component/commodity/AddCommodity";
-import './user.less'
 
 class Commodity extends React.Component {
     constructor() {

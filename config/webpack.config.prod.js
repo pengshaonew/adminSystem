@@ -46,6 +46,13 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths
     {publicPath: Array(cssFilename.split('/').length).join('../')}
     : {};
 
+
+let theme = {};
+if(!!require(paths.theme)){
+    theme = require(paths.theme);
+}
+
+let themeStr = JSON.stringify(theme);
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
 // The development configuration is different and lives in a separate file.
@@ -116,6 +123,20 @@ module.exports = {
                         ['import', [{ libraryName: "antd", style: true }]],
                     ]
                 }
+            },
+            {
+                include: /node_modules/,
+                test: /\.less$/,
+                loader: 'style!css!postcss!'  + 'less?{"modifyVars":'+ themeStr + '}'
+            },
+            {
+                exclude: /node_modules/,
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract(
+                    'style',
+                    'css?importLoaders=1&modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss!'  + 'less?{"modifyVars":'+ themeStr + '}',
+                    extractTextPluginOptions
+                )
             },
         ],
         rules: [

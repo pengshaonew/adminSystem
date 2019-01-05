@@ -22,6 +22,13 @@ const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
+let theme = {};
+if(!!require(paths.theme)){
+    theme = require(paths.theme);
+}
+
+let themeStr = JSON.stringify(theme);
+console.log(themeStr);
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
@@ -114,6 +121,16 @@ module.exports = {
                     // directory for faster rebuilds.
                     cacheDirectory: true
                 }
+            },
+            {
+                include: /node_modules/,
+                test: /\.less$/,
+                loader: 'style!css!postcss!' + 'less?{"modifyVars":'+ themeStr + '}'
+            },
+            {
+                exclude: /node_modules/,
+                test: /\.less$/,
+                loader: 'style!css?importLoaders=1&modules&localIdentName=[name]__[local]___[hash:base64:5]!postcss!'  + 'less?{"modifyVars":'+ themeStr + '}'
             },
         ],
         rules: [
@@ -233,7 +250,13 @@ module.exports = {
                     },
                     {
                         test: /\.less$/,
-                        loader: 'style!css!postcss!sass?outputStyle=expanded'
+                        use: [{
+                            loader: 'style-loader' // creates style nodes from JS strings
+                        }, {
+                            loader: 'css-loader' // translates CSS into CommonJS
+                        }, {
+                            loader: 'less-loader' // compiles Less to CSS
+                        }]
                     }
                 ],
             },
