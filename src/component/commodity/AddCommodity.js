@@ -1,15 +1,16 @@
 import React from 'react';
 import {Modal, Form, Input} from 'antd';
+import {fetchData} from '../../utils/fetchServe'
 
 const FormItem = Form.Item;
 const createForm = Form.create;
 
-class AddUser extends React.Component {
+class AddCommodity extends React.Component {
     constructor() {
         super();
         this.state = {
-            title: '新建账号',
-            userName: '',
+            title: '新建商品',
+            name: '',
             message: ''
         }
     }
@@ -27,7 +28,7 @@ class AddUser extends React.Component {
         let {updateRecord} = props;
         if (updateRecord) {
             let values = {
-                userName: updateRecord.userName
+                name: updateRecord.name
             };
             this.props.form.setFieldsValue(values);
         }
@@ -37,13 +38,12 @@ class AddUser extends React.Component {
         this.props.form.validateFields(
             (err, values) => {
                 if (!err) {
-                    let {add, updateUser, users, updateRecord, handleCancel} = this.props;
+                    let {add, update, updateRecord, handleCancel} = this.props;
                     if (updateRecord) {
-                        let user = users.find(item => item.id === updateRecord.id);
-                        user.userName = values.userName;
-                        updateUser(user);
+                        values.id = updateRecord.id;
+                        update(values);
                     } else {
-                        values.id = Date.now() + '';
+                        // values.id = Date.now() + '';
                         add(values);
                     }
                     handleCancel();
@@ -60,22 +60,26 @@ class AddUser extends React.Component {
             if (!(/^[\w|\u4e00-\u9fa5]+$/.test(value))) {
                 callback(new Error('名称必须是由数字、字母、下划线或文字组成'));
             } else {
-                let {users, updateRecord} = this.props;
-                let flag = users.some(item => {
-                    return (item.userName === value && item.id !== updateRecord.id);
+                let {updateRecord} = this.props;
+                let params={
+                    name:value,
+                    id:updateRecord.id
+                };
+                fetchData(`/commodity/checkCommodityName`, params).then(res => {
+                    if (res.data) {
+                        callback();
+                    } else {
+                        callback(new Error('商品名称重复,请重新输入'));
+                    }
                 });
-                if (flag) {
-                    callback(new Error('用户名重复,请重新输入'));
-                } else {
-                    callback();
-                }
+
             }
         }
     };
 
     render() {
         const {getFieldDecorator} = this.props.form;
-        let {loginStatus, isAddUser, handleCancel} = this.props;
+        let {isAddUser, handleCancel} = this.props;
         const formItemLayout1 = {
             labelCol: {span: 8},
             wrapperCol: {span: 10}
@@ -89,7 +93,7 @@ class AddUser extends React.Component {
             >
                 <Form>
                     <FormItem {...formItemLayout1} label="用户名称">
-                        {getFieldDecorator('userName', {
+                        {getFieldDecorator('name', {
                             rules: [{required: true, message: '请输入用户名称'},
                                 {validator: this.nameExists}],
                         })(
@@ -97,10 +101,9 @@ class AddUser extends React.Component {
                         )}
                     </FormItem>
                 </Form>
-                <div>{loginStatus}</div>
             </Modal>
         );
     }
 }
 
-export default createForm({})(AddUser);
+export default createForm({})(AddCommodity);

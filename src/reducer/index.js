@@ -3,9 +3,9 @@
  */
 import {combineReducers, applyMiddleware, createStore} from 'redux'
 import thunk from 'redux-thunk'
-import {user} from './user/user'
+import {commodity} from './commodity/commodity'
 let store = createStore(combineReducers({
-   user
+   commodity
 }), applyMiddleware(thunk));
 window.store = store;
 export default store;

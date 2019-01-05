@@ -5,7 +5,7 @@ export function fetchData(url,params){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(params)
+        body: JSON.stringify(params||{})
     }).then((response)=>{
         return response.json()
     }).catch(e=>{

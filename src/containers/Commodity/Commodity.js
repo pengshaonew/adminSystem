@@ -2,12 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {Table,Spin, Popconfirm, Button, Divider} from 'antd'
 import {
-    add, delUser, updateUser,getCommodity,
-} from '../../action/userAction'
-import AddUser from "../../component/test/AddUser";
+    addCommodity,delCommodity, updateCommodity,getCommodity,
+} from '../../action/commodityAction'
+import AddUser from "../../component/commodity/AddCommodity";
 import './user.less'
 
-class User extends React.Component {
+class Commodity extends React.Component {
     constructor() {
         super();
         let _this = this;
@@ -16,12 +16,15 @@ class User extends React.Component {
             updateRecord: false,
             columns: [
                 {
-                    title: 'ID',
-                    dataIndex: 'id'
+                    title: '序号',
+                    dataIndex: 'id',
+                    render(text){
+                        return text+1
+                    }
                 },
                 {
-                    title: '用户名',
-                    dataIndex: 'userName'
+                    title: '商品名称',
+                    dataIndex: 'name'
                 },
                 {
                     title: '操作',
@@ -46,7 +49,13 @@ class User extends React.Component {
 
     componentWillMount() {
         let {getCommodity} = this.props;
-        getCommodity({a:123});
+        getCommodity();
+    }
+    componentWillReceiveProps(newProps){
+        let {loading,getCommodity}=newProps;
+        if(loading && loading !==this.props.loading){
+            getCommodity();
+        }
     }
 
     handleOk = attr => {
@@ -67,13 +76,13 @@ class User extends React.Component {
     };
 
     handleDel = record => {
-        this.props.delUser({id: record.id});
+        this.props.delCommodity({id: record.id});
     };
 
     render() {
-        let {loading,users, add, updateUser} = this.props;
+        let {loading,users, addCommodity, updateCommodity} = this.props;
         let title = () => {
-            return <Button type="primary" onClick={this.handleOk.bind(null, 'isAddUser')}>新建账户</Button>
+            return <Button type="primary" onClick={this.handleOk.bind(null, 'isAddUser')}>新建商品</Button>
         };
         return (
             <div className={'box'}>
@@ -90,9 +99,8 @@ class User extends React.Component {
                     isAddUser={this.state.isAddUser}
                     updateRecord={this.state.updateRecord}
                     handleCancel={this.handleCancel}
-                    users={users}
-                    add={add}
-                    updateUser={updateUser}
+                    add={addCommodity}
+                    update={updateCommodity}
                 />
             </div>
         );
@@ -100,12 +108,12 @@ class User extends React.Component {
 }
 
 let mapStateToAppProps = state => {
-    let testState = state.user;
+    let testState = state.commodity;
     return {
         loading: testState.loading,
         users: testState.users,
     }
 };
 export default connect(mapStateToAppProps, {
-    add,delUser, updateUser, getCommodity,
-})(User);
+    addCommodity,delCommodity, updateCommodity, getCommodity,
+})(Commodity);

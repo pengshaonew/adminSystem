@@ -6,14 +6,17 @@ import {
     DEL,
     UPDATE,
     USER_GET_DATA_LIST,
-} from '../../action/userAction'
+    CHANGE_LOADING,
+} from '../../action/commodityAction'
 let initState = {
     loading: false,
     users: []
 };
-export function user(state = initState, action) {
+export function commodity(state = initState, action) {
     let {type,data} = action;
     switch (type) {
+        case CHANGE_LOADING:
+            return {...state,loading:true};
         case ADD:
             return {...state, users: [...state.users, data], loading: false};
         case DEL:
