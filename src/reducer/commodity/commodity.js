@@ -5,12 +5,17 @@ import {
     ADD,
     DEL,
     UPDATE,
-    USER_GET_DATA_LIST,
+    COMMODITY_GET_DATA_LIST,
+    COMMODITY_GET_CLASS_DATA,
     CHANGE_LOADING,
+    COMMODITY_CHANGE_SEARCH_FORM_DATA,
 } from '../../action/commodityAction'
 let initState = {
     loading: false,
-    users: []
+    searchFormData:{},
+    dataList: [],
+    classList:[],
+    projectName:""
 };
 export function commodity(state = initState, action) {
     let {type,data} = action;
@@ -18,22 +23,33 @@ export function commodity(state = initState, action) {
         case CHANGE_LOADING:
             return {...state,loading:true};
         case ADD:
-            return {...state, users: [...state.users, data], loading: false};
+            return {...state, dataList: [...state.dataList, data], loading: false};
         case DEL:
-            let delUsers = state.users;
-            delUsers = delUsers.filter(item => item.id !== data.id);
-            return {...state, users: [...delUsers], loading: false};
+            let delCommodity = state.dataList;
+            delCommodity = delCommodity.filter(item => item.id !== data.id);
+            return {...state, dataList: [...delCommodity], loading: false};
         case UPDATE:
-            let updateUsers = state.users;
-            updateUsers = updateUsers.map(item => {
+            let dataListNew = state.dataList;
+            dataListNew = dataListNew.map(item => {
                 if (item.id === data.id) {
-                    item.userName = data.userName;
+                    item.name = data.name;
                 }
                 return item;
             });
-            return {...state, users: [...updateUsers], loading: false};
-        case USER_GET_DATA_LIST:
-            return {...state, users: [...data], loading: false};
+            return {...state, dataList: [...dataListNew], loading: false};
+        case COMMODITY_GET_DATA_LIST:
+            return {...state, dataList: [...data], loading: false};
+        case COMMODITY_GET_CLASS_DATA:
+            return {...state, classList: data.classList,projectName:data.projectName, loading: false};
+        case COMMODITY_CHANGE_SEARCH_FORM_DATA:
+            let fields = action.fields;
+            let searchFormData = state.searchFormData;
+            for (let key in fields) {
+                if (fields.hasOwnProperty(key)) {
+                    searchFormData[key]= fields[key].value;
+                }
+            }
+            return {...state,searchFormData};
         default:
             return state;
     }

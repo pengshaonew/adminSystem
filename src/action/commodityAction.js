@@ -4,11 +4,13 @@
 import 'isomorphic-fetch'
 import {fetchData} from '../utils/fetchServe'
 
+export const CHANGE_LOADING = 'CHANGE_LOADING';
 export const ADD = 'ADD';
 export const DEL = 'DEL';
 export const UPDATE = 'UPDATE';
-export const USER_GET_DATA_LIST = 'USER_GET_DATA_LIST';
-export const CHANGE_LOADING = 'CHANGE_LOADING';
+export const COMMODITY_GET_DATA_LIST = 'COMMODITY_GET_DATA_LIST';
+export const COMMODITY_GET_CLASS_DATA = 'COMMODITY_GET_CLASS_DATA';
+export const COMMODITY_CHANGE_SEARCH_FORM_DATA = 'COMMODITY_CHANGE_SEARCH_FORM_DATA';
 
 export function changeLoading(flag, pageNum, pageSize) {
     return {
@@ -19,11 +21,21 @@ export function changeLoading(flag, pageNum, pageSize) {
     }
 }
 
+export function init() {
+    return dispatch => {
+        fetchData(`/class/classList`,{}).then(res => {
+            dispatch({
+                type: COMMODITY_GET_CLASS_DATA,
+                data: res
+            })
+        })
+    }
+}
 export function getCommodity(params) {
     return dispatch => {
         fetchData(`/commodity/commodityList`, params).then(res => {
             dispatch({
-                type: USER_GET_DATA_LIST,
+                type: COMMODITY_GET_DATA_LIST,
                 data: res
             })
         })
@@ -57,5 +69,14 @@ export function updateCommodity(params) {
                 dispatch(changeLoading(true));
             }
         })
+    }
+}
+/**
+ * 修改查询表单数据
+ */
+export function changeSearchFormData(fields) {
+    return {
+        type: COMMODITY_CHANGE_SEARCH_FORM_DATA,
+        fields: fields
     }
 }

@@ -1,15 +1,15 @@
 import React from 'react';
-import {Modal, Form, Input} from 'antd';
+import {Modal, Form, Input, Select, Row, Col} from 'antd';
 import {fetchData} from '../../utils/fetchServe'
 
 const FormItem = Form.Item;
 const createForm = Form.create;
+const Option = Select.Option;
 
 class AddCommodity extends React.Component {
     constructor() {
         super();
         this.state = {
-            title: '新建商品',
             name: '',
             message: ''
         }
@@ -17,10 +17,8 @@ class AddCommodity extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.isAddUser && nextProps.isAddUser !== this.props.isAddUser) {
-            this.initForm(nextProps);
-        }
-        if (!nextProps.isAddUser) {
             this.props.form.resetFields();
+            this.initForm(nextProps);
         }
     }
 
@@ -39,11 +37,11 @@ class AddCommodity extends React.Component {
             (err, values) => {
                 if (!err) {
                     let {add, update, updateRecord, handleCancel} = this.props;
+                    values.createDate = new Date().toLocaleDateString();
                     if (updateRecord) {
                         values.id = updateRecord.id;
                         update(values);
                     } else {
-                        // values.id = Date.now() + '';
                         add(values);
                     }
                     handleCancel();
@@ -61,9 +59,9 @@ class AddCommodity extends React.Component {
                 callback(new Error('名称必须是由数字、字母、下划线或文字组成'));
             } else {
                 let {updateRecord} = this.props;
-                let params={
-                    name:value,
-                    id:updateRecord.id
+                let params = {
+                    name: value,
+                    id: updateRecord.id
                 };
                 fetchData(`/commodity/checkCommodityName`, params).then(res => {
                     if (res.data) {
@@ -79,27 +77,58 @@ class AddCommodity extends React.Component {
 
     render() {
         const {getFieldDecorator} = this.props.form;
-        let {isAddUser, handleCancel} = this.props;
-        const formItemLayout1 = {
+        let {
+            isAddCommodity, handleCancel, updateRecord,classList
+        } = this.props;
+        const formItemLayout = {
             labelCol: {span: 8},
             wrapperCol: {span: 10}
         };
+        let title = updateRecord ? '修改构件' : '新增构件';
         return (
             <Modal
-                title={this.state.title}
-                visible={isAddUser}
+                width={'1200px'}
+                title={title}
+                visible={isAddCommodity}
                 onCancel={handleCancel}
                 onOk={this.handSubmit}
             >
                 <Form>
-                    <FormItem {...formItemLayout1} label="用户名称">
-                        {getFieldDecorator('name', {
-                            rules: [{required: true, message: '请输入用户名称'},
-                                {validator: this.nameExists}],
-                        })(
-                            <Input placeholder="请输入用户名称"/>
-                        )}
-                    </FormItem>
+                    <Row>
+                        <Col sm={6}>
+                            <FormItem label='所属分类' {...formItemLayout}>
+                                {getFieldDecorator('parentId', {
+                                    rules: [{required: true, message: '请选择分类'}],
+                                })(
+                                    <Select placeholder="请选择分类" allowClear={true}>
+                                        {
+                                            classList.map(opt => {
+                                                return (<Option key={opt.id + ''}
+                                                                value={opt.id + ''}>
+                                                    {opt.name}</Option>);
+                                            })
+                                        }
+                                    </Select>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={6}>
+                            <FormItem {...formItemLayout} label="构件名称">
+                                {getFieldDecorator('name', {
+                                    rules: [{required: true, message: '请输入构件名称'},
+                                    {validator: this.nameExists}],
+                                })(
+                                    <Input placeholder="请输入构件名称"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={6}>
+
+                        </Col>
+                        <Col sm={6}>
+
+                        </Col>
+                    </Row>
                 </Form>
             </Modal>
         );

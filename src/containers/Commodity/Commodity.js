@@ -1,24 +1,23 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import {Table,Spin, Popconfirm, Button, Divider} from 'antd'
+import {Table, Spin, Popconfirm, Button, Divider} from 'antd'
 import {
-    addCommodity,delCommodity, updateCommodity,getCommodity,
+    addCommodity, delCommodity, updateCommodity, getCommodity,changeLoading,init,changeSearchFormData
 } from '../../action/commodityAction'
-import AddUser from "../../component/commodity/AddCommodity";
+import AddCommodity from "../../component/commodity/AddCommodity";
+import CommoditySearchForm from "../../component/commodity/CommoditySearchForm";
 
 class Commodity extends React.Component {
     constructor() {
         super();
         let _this = this;
         this.state = {
-            isAddUser: false,
-            updateRecord: false,
             columns: [
                 {
                     title: '序号',
                     dataIndex: 'id',
-                    render(text){
-                        return text+1
+                    render(text,record,index) {
+                        return index + 1
                     }
                 },
                 {
@@ -28,9 +27,11 @@ class Commodity extends React.Component {
                 {
                     title: '操作',
                     key: 'operation',
-                    render(text, record){
+                    render(text, record) {
                         return (
                             <span>
+                                <a onClick={_this.handleUpdate.bind(null, record)}>查看二维码</a>
+                                <Divider type="vertical"/>
                                 <a onClick={_this.handleUpdate.bind(null, record)}>修改</a>
                                 <Divider type="vertical"/>
                                 <Popconfirm
@@ -42,18 +43,22 @@ class Commodity extends React.Component {
                         )
                     }
                 }
-            ]
+            ],
+            isAddCommodity: false,
+            updateRecord: false
         }
     }
 
     componentWillMount() {
-        let {getCommodity} = this.props;
-        getCommodity();
+        let {getCommodity,init,searchFormData} = this.props;
+        init();
+        getCommodity(searchFormData);
     }
-    componentWillReceiveProps(newProps){
-        let {loading,getCommodity}=newProps;
-        if(loading && loading !==this.props.loading){
-            getCommodity();
+
+    componentWillReceiveProps(newProps) {
+        let {loading, getCommodity,searchFormData} = newProps;
+        if (loading && loading !== this.props.loading) {
+            getCommodity(searchFormData);
         }
     }
 
@@ -64,14 +69,13 @@ class Commodity extends React.Component {
     };
     handleCancel = () => {
         this.setState({
-            isAddUser: false,
+            isAddCommodity: false,
             updateRecord: false
         })
     };
 
     handleUpdate = record => {
-        this.handleOk('isAddUser');
-        this.setState({updateRecord: record});
+        this.setState({isAddCommodity: true, updateRecord: record});
     };
 
     handleDel = record => {
@@ -79,27 +83,37 @@ class Commodity extends React.Component {
     };
 
     render() {
-        let {loading,users, addCommodity, updateCommodity} = this.props;
+        let {
+            loading,projectName, classList,dataList,addCommodity, updateCommodity,changeLoading, searchFormData,changeSearchFormData
+        } = this.props;
         let title = () => {
-            return <Button type="primary" onClick={this.handleOk.bind(null, 'isAddUser')}>新建商品</Button>
+            return <Button type="primary" onClick={this.handleOk.bind(null, 'isAddCommodity')}>新增构件</Button>
         };
         return (
             <div className={'box'}>
+                <h1>项目名称：{projectName}</h1>
                 <Spin spinning={loading}>
+                    <CommoditySearchForm
+                        classList={classList}
+                        changeLoading={changeLoading}
+                        searchFormData={ searchFormData}
+                        changeSearchFormData={ changeSearchFormData}
+                    />
                     <Table
                         size="small"
                         rowKey={record => record.id}
                         title={title}
                         columns={this.state.columns}
-                        dataSource={users}
+                        dataSource={dataList}
                     />
                 </Spin>
-                <AddUser
-                    isAddUser={this.state.isAddUser}
+                <AddCommodity
+                    isAddCommodity={this.state.isAddCommodity}
                     updateRecord={this.state.updateRecord}
                     handleCancel={this.handleCancel}
                     add={addCommodity}
                     update={updateCommodity}
+                    classList={classList}
                 />
             </div>
         );
@@ -110,9 +124,12 @@ let mapStateToAppProps = state => {
     let testState = state.commodity;
     return {
         loading: testState.loading,
-        users: testState.users,
+        dataList: testState.dataList,
+        classList: testState.classList,
+        projectName: testState.projectName,
+        searchFormData: testState.searchFormData,
     }
 };
 export default connect(mapStateToAppProps, {
-    addCommodity,delCommodity, updateCommodity, getCommodity,
+    addCommodity, delCommodity, updateCommodity, getCommodity,changeLoading,init,changeSearchFormData
 })(Commodity);
