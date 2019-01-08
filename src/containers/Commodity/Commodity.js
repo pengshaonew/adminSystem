@@ -93,12 +93,12 @@ class Commodity extends React.Component {
             <div className={'box'}>
                 <h1>项目名称：{projectName}</h1>
                 <Spin spinning={loading}>
-                    <CommoditySearchForm
+                    {/*<CommoditySearchForm
                         classList={classList}
                         changeLoading={changeLoading}
                         searchFormData={ searchFormData}
                         changeSearchFormData={ changeSearchFormData}
-                    />
+                    />*/}
                     <Table
                         size="small"
                         rowKey={record => record.id}

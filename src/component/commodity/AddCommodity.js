@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, Form, Input, Select, Row, Col} from 'antd';
+import {Modal, Form, Input, Select, Row, Col,Upload,notification} from 'antd';
 import {fetchData} from '../../utils/fetchServe'
 
 const FormItem = Form.Item;
@@ -37,7 +37,7 @@ class AddCommodity extends React.Component {
             (err, values) => {
                 if (!err) {
                     let {add, update, updateRecord, handleCancel} = this.props;
-                    values.createDate = new Date().toLocaleDateString();
+                    values.createDate = new Date().toLocaleDateString().replace(/\//g,"-");
                     if (updateRecord) {
                         values.id = updateRecord.id;
                         update(values);
@@ -52,6 +52,7 @@ class AddCommodity extends React.Component {
     };
     // 校验名称是否重复
     nameExists = (rule, value, callback) => {
+        let parentId=this.props.form.getFieldValue('parentId');
         if (!value) {
             callback();
         } else {
@@ -60,6 +61,7 @@ class AddCommodity extends React.Component {
             } else {
                 let {updateRecord} = this.props;
                 let params = {
+                    parentId:parentId,
                     name: value,
                     id: updateRecord.id
                 };
@@ -85,6 +87,68 @@ class AddCommodity extends React.Component {
             wrapperCol: {span: 10}
         };
         let title = updateRecord ? '修改构件' : '新增构件';
+
+        const typeCode =['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
+        const self = this;
+        const props = {
+            action: `/upload/commodityImg`,
+            beforeUpload(file) {
+                const suffix = file.name.slice(file.name.lastIndexOf('.') + 1);
+                const isTYPE = typeCode.includes(suffix);
+                if (!isTYPE) {
+                    notification.warning({
+                        placement: 'bottomLeft',
+                        message: '图片格式',
+                        description: `请选择${typeCode.join('/')}格式图片！`,
+                        className: 'notification-warning'
+                    });
+                    return isTYPE;
+                }
+                const isSIZE = file.size / 1024 / 1024 <= 5;
+                if (!isSIZE) {
+                    notification.warning({
+                        placement: 'bottomLeft',
+                        message: '图片大小',
+                        description: '请选择小于5M图片！',
+                        className: 'notification-warning'
+                    });
+                    return isSIZE;
+                }
+                return new Promise((resolve, reject) => {
+                    let image = new Image();
+                    image.src = window.URL.createObjectURL(file);
+                    image.onload = () => {
+                        resolve();
+                    };
+                });
+            },
+            onChange(info) {
+                if (info.file.status === 'error') {
+                    notification.error({
+                        placement: 'bottomLeft',
+                        message: '上传状态',
+                        description: '上传文件失败，请联系管理员！',
+                        className: 'notification-failed'
+                    });
+                } else if (info.file.status === 'done') {
+                    let response = info.file.response;
+                    if (typeof response === 'undefined' || response === null) {
+                        notification.error({
+                            placement: 'bottomLeft',
+                            message: '上传状态',
+                            description: '上传文件失败，请联系管理员！',
+                            className: 'notification-failed'
+                        });
+                    } else {
+                        console.log(response.data);
+                        self.setState({
+                            fileUrl: response.data,
+                            fileError: ''
+                        });
+                    }
+                }
+            }
+        };
         return (
             <Modal
                 width={'1200px'}
@@ -126,6 +190,14 @@ class AddCommodity extends React.Component {
 
                         </Col>
                         <Col sm={6}>
+
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col sm={12}>
+                            <FormItem {...formItemLayout} label="构件进度图片">
+                                <Upload {...props}><a>开始上传</a></Upload>
+                            </FormItem>
 
                         </Col>
                     </Row>
