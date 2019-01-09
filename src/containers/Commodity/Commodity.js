@@ -6,6 +6,7 @@ import {
 } from '../../action/commodityAction'
 import AddCommodity from "../../component/commodity/AddCommodity";
 import CommoditySearchForm from "../../component/commodity/CommoditySearchForm";
+import './Commodity.less'
 
 class Commodity extends React.Component {
     constructor() {
@@ -14,15 +15,12 @@ class Commodity extends React.Component {
         this.state = {
             columns: [
                 {
-                    title: '序号',
-                    dataIndex: 'id',
-                    render(text,record,index) {
-                        return index + 1
-                    }
+                    title: '构件名称',
+                    dataIndex: 'name'
                 },
                 {
-                    title: '商品名称',
-                    dataIndex: 'name'
+                    title: '分类',
+                    dataIndex: 'parentName'
                 },
                 {
                     title: '操作',
@@ -35,7 +33,7 @@ class Commodity extends React.Component {
                                 <a onClick={_this.handleUpdate.bind(null, record)}>修改</a>
                                 <Divider type="vertical"/>
                                 <Popconfirm
-                                    title="确定要删除该账户吗?"
+                                    title="确定要删除这条数据吗?"
                                     onConfirm={_this.handleDel.bind(null, record)}>
                                     <a>删除</a>
                                 </Popconfirm>
@@ -107,14 +105,16 @@ class Commodity extends React.Component {
                         dataSource={dataList}
                     />
                 </Spin>
-                <AddCommodity
-                    isAddCommodity={this.state.isAddCommodity}
-                    updateRecord={this.state.updateRecord}
-                    handleCancel={this.handleCancel}
-                    add={addCommodity}
-                    update={updateCommodity}
-                    classList={classList}
-                />
+                {
+                    this.state.isAddCommodity &&
+                    <AddCommodity
+                        updateRecord={this.state.updateRecord}
+                        handleCancel={this.handleCancel}
+                        add={addCommodity}
+                        update={updateCommodity}
+                        classList={classList}
+                    />
+                }
             </div>
         );
     }

@@ -1,6 +1,6 @@
 import React from 'react';
-import {Modal, Form, Input, Select, Row, Col,Upload,notification} from 'antd';
-import {fetchData} from '../../utils/fetchServe'
+import {Modal, Form, Input, Select, Row, Col, Upload, notification, Icon, Popover} from 'antd';
+import {fetchData} from '../../utils/fetchServe';
 
 const FormItem = Form.Item;
 const createForm = Form.create;
@@ -10,24 +10,22 @@ class AddCommodity extends React.Component {
     constructor() {
         super();
         this.state = {
-            name: '',
-            message: ''
+            imgUrl: '',
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.isAddUser && nextProps.isAddUser !== this.props.isAddUser) {
-            this.props.form.resetFields();
-            this.initForm(nextProps);
-        }
+    componentDidMount() {
+        this.initForm();
     }
 
-    initForm = props => {
-        let {updateRecord} = props;
+    initForm = () => {
+        let {updateRecord} = this.props;
         if (updateRecord) {
             let values = {
-                name: updateRecord.name
+                parentId:updateRecord.parentId,
+                name: updateRecord.name,
             };
+            this.setState({imgUrl: updateRecord.imgUrl});
             this.props.form.setFieldsValue(values);
         }
     };
@@ -36,8 +34,10 @@ class AddCommodity extends React.Component {
         this.props.form.validateFields(
             (err, values) => {
                 if (!err) {
-                    let {add, update, updateRecord, handleCancel} = this.props;
-                    values.createDate = new Date().toLocaleDateString().replace(/\//g,"-");
+                    let {add, update, updateRecord, handleCancel,classList} = this.props;
+                    values.createDate = new Date().toLocaleDateString().replace(/\//g, "-");
+                    values.parentName = classList.find(item=>item.id==values.parentId).name;
+                    values.imgUrl=this.state.imgUrl;
                     if (updateRecord) {
                         values.id = updateRecord.id;
                         update(values);
@@ -52,7 +52,7 @@ class AddCommodity extends React.Component {
     };
     // 校验名称是否重复
     nameExists = (rule, value, callback) => {
-        let parentId=this.props.form.getFieldValue('parentId');
+        let parentId = this.props.form.getFieldValue('parentId');
         if (!value) {
             callback();
         } else {
@@ -61,7 +61,7 @@ class AddCommodity extends React.Component {
             } else {
                 let {updateRecord} = this.props;
                 let params = {
-                    parentId:parentId,
+                    parentId,
                     name: value,
                     id: updateRecord.id
                 };
@@ -77,20 +77,11 @@ class AddCommodity extends React.Component {
         }
     };
 
-    render() {
-        const {getFieldDecorator} = this.props.form;
-        let {
-            isAddCommodity, handleCancel, updateRecord,classList
-        } = this.props;
-        const formItemLayout = {
-            labelCol: {span: 8},
-            wrapperCol: {span: 10}
-        };
-        let title = updateRecord ? '修改构件' : '新增构件';
-
-        const typeCode =['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
+    propsFun = () => {
+        const typeCode = ['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
         const self = this;
         const props = {
+            accept:'image/*',
             action: `/upload/commodityImg`,
             beforeUpload(file) {
                 const suffix = file.name.slice(file.name.lastIndexOf('.') + 1);
@@ -104,12 +95,12 @@ class AddCommodity extends React.Component {
                     });
                     return isTYPE;
                 }
-                const isSIZE = file.size / 1024 / 1024 <= 5;
+                const isSIZE = file.size / 1024 / 1024 <= 10;
                 if (!isSIZE) {
                     notification.warning({
                         placement: 'bottomLeft',
                         message: '图片大小',
-                        description: '请选择小于5M图片！',
+                        description: '请选择小于10M图片！',
                         className: 'notification-warning'
                     });
                     return isSIZE;
@@ -142,20 +133,35 @@ class AddCommodity extends React.Component {
                     } else {
                         console.log(response.data);
                         self.setState({
-                            fileUrl: response.data,
+                            imgUrl: response.url,
                             fileError: ''
                         });
                     }
                 }
             }
         };
+        return props;
+    };
+
+    render() {
+        const {getFieldDecorator} = this.props.form;
+        let {
+            handleCancel, updateRecord, classList
+        } = this.props;
+        const formItemLayout = {
+            labelCol: {span: 8},
+            wrapperCol: {span: 10}
+        };
+        let title = updateRecord ? '修改构件' : '新增构件';
+
         return (
             <Modal
                 width={'1200px'}
                 title={title}
-                visible={isAddCommodity}
+                visible
                 onCancel={handleCancel}
                 onOk={this.handSubmit}
+                className={'modals'}
             >
                 <Form>
                     <Row>
@@ -180,24 +186,26 @@ class AddCommodity extends React.Component {
                             <FormItem {...formItemLayout} label="构件名称">
                                 {getFieldDecorator('name', {
                                     rules: [{required: true, message: '请输入构件名称'},
-                                    {validator: this.nameExists}],
+                                        {validator: this.nameExists}],
                                 })(
                                     <Input placeholder="请输入构件名称"/>
                                 )}
                             </FormItem>
                         </Col>
                         <Col sm={6}>
+                            <FormItem {...formItemLayout} label="构件进度图片">
+                                <Upload {...this.propsFun()}><a>开始上传</a></Upload>&nbsp;
+                                {
+                                    this.state.imgUrl &&
+                                    <Popover content={<img src={this.state.imgUrl} style={{maxWidth: 600}}/>} title=""
+                                             trigger="click" placement="bottom">
+                                        <a><Icon type="picture"/></a>
+                                    </Popover>
+                                }
+                            </FormItem>
 
                         </Col>
                         <Col sm={6}>
-
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col sm={12}>
-                            <FormItem {...formItemLayout} label="构件进度图片">
-                                <Upload {...props}><a>开始上传</a></Upload>
-                            </FormItem>
 
                         </Col>
                     </Row>
