@@ -2,16 +2,49 @@
   .ant-upload-list {
     display: none;
   }
+
   .modals {
     width: 1300px;
     top: 30px !important;
     height: 95%;
+
     .ant-modal-body {
       height: 85%;
       overflow-y: auto;
     }
   }
-  .ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th{
+
+  .ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th {
     background: #f8f8f8;
+  }
+
+  .ant-table-small > .ant-table-content > .ant-table-body > table {
+    padding: 0;
+  }
+
+  .table-even-row {
+    background-color: white;
+  }
+
+  .table-odd-row {
+    background-color: #f9f9f9;
+  }
+
+  .QRCode {
+    padding: 5px;
+    background: #fff;
+    box-shadow: 0px 0px 6px;
+    border-radius: 3px;
+    z-index: 1;
+  }
+
+  .ant-modal-header {
+    background: @primary-color;
+    .ant-modal-title {
+      color: #fff;
+    }
+    .ant-modal-close{
+      color:#fff;
+    }
   }
 }

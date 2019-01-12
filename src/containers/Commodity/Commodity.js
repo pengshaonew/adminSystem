@@ -1,12 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import {Table, Spin, Popconfirm, Button, Divider} from 'antd'
+import {Table, Spin, Popconfirm, Button, Divider, Popover} from 'antd'
 import {
-    addCommodity, delCommodity, updateCommodity, getCommodity,changeLoading,init,changeSearchFormData
+    addCommodity, delCommodity, updateCommodity, getCommodity, changeLoading, init, changeSearchFormData
 } from '../../action/commodityAction'
 import AddCommodity from "../../component/commodity/AddCommodity";
 import CommoditySearchForm from "../../component/commodity/CommoditySearchForm";
 import './Commodity.less'
+import ClassList from "../../component/commodity/ClassList";
+import QRCode from 'qrcode.react';
 
 class Commodity extends React.Component {
     constructor() {
@@ -28,7 +30,9 @@ class Commodity extends React.Component {
                     render(text, record) {
                         return (
                             <span>
-                                <a onClick={_this.handleUpdate.bind(null, record)}>查看二维码</a>
+                                 <Popover content={<QRCode className={'QRCode'} value="http://facebook.github.io/react/" size={200}/>} trigger="click">
+                                      <a>查看二维码</a>
+                                 </Popover>
                                 <Divider type="vertical"/>
                                 <a onClick={_this.handleUpdate.bind(null, record)}>修改</a>
                                 <Divider type="vertical"/>
@@ -48,15 +52,23 @@ class Commodity extends React.Component {
     }
 
     componentWillMount() {
-        let {getCommodity,init,searchFormData} = this.props;
+        let {getCommodity, init, searchFormData, pagination} = this.props;
         init();
-        getCommodity(searchFormData);
+        getCommodity({
+            pageNum: pagination.current,
+            pageSize: pagination.pageSize,
+            ...searchFormData
+        });
     }
 
     componentWillReceiveProps(newProps) {
-        let {loading, getCommodity,searchFormData} = newProps;
+        let {loading, getCommodity, searchFormData, pagination} = newProps;
         if (loading && loading !== this.props.loading) {
-            getCommodity(searchFormData);
+            getCommodity({
+                pageNum: pagination.current,
+                pageSize: pagination.pageSize,
+                ...searchFormData
+            });
         }
     }
 
@@ -68,6 +80,7 @@ class Commodity extends React.Component {
     handleCancel = () => {
         this.setState({
             isAddCommodity: false,
+            isClassList: false,
             updateRecord: false
         })
     };
@@ -80,22 +93,41 @@ class Commodity extends React.Component {
         this.props.delCommodity({id: record.id});
     };
 
+
+    handleChangePage = (pagination) => {
+        let {changeLoading} = this.props;
+        changeLoading(true, pagination.current, pagination.pageSize);
+    };
+
+    setRowClassName = (record, index) => {
+        if (index % 2 === 0) {
+            return 'table-even-row';
+        } else {
+            return 'table-odd-row';
+        }
+    };
+
     render() {
         let {
-            loading,projectName, classList,dataList,addCommodity, updateCommodity,changeLoading, searchFormData,changeSearchFormData
+            loading, projectName, classList, dataList, addCommodity, updateCommodity, changeLoading, searchFormData, changeSearchFormData,
+            pagination, init
         } = this.props;
         let title = () => {
-            return <Button type="primary" onClick={this.handleOk.bind(null, 'isAddCommodity')}>新增构件</Button>
+            return <div>
+                <Button type="primary" onClick={this.handleOk.bind(null, 'isAddCommodity')}
+                        style={{marginRight: 20}}>新增构件</Button>
+                {/*<Button type="primary" onClick={this.handleOk.bind(null, 'isClassList')}>分类管理</Button>*/}
+            </div>
         };
         return (
-            <div className={'box'}>
-                <h1>项目名称：{projectName}</h1>
+            <div className={'box'} style={{padding:20}}>
+                <h4 style={{height:60,lineHeight:'60px',marginLeft:'20px',fontSize:'24px'}}>项目名称：{projectName}</h4>
                 <Spin spinning={loading}>
                     {/*<CommoditySearchForm
                         classList={classList}
                         changeLoading={changeLoading}
-                        searchFormData={ searchFormData}
-                        changeSearchFormData={ changeSearchFormData}
+                        searchFormData={searchFormData}
+                        changeSearchFormData={changeSearchFormData}
                     />*/}
                     <Table
                         size="small"
@@ -103,6 +135,9 @@ class Commodity extends React.Component {
                         title={title}
                         columns={this.state.columns}
                         dataSource={dataList}
+                        pagination={pagination}
+                        onChange={this.handleChangePage}
+                        rowClassName={this.setRowClassName}
                     />
                 </Spin>
                 {
@@ -113,6 +148,15 @@ class Commodity extends React.Component {
                         add={addCommodity}
                         update={updateCommodity}
                         classList={classList}
+                    />
+                }
+                {
+                    this.state.isClassList &&
+                    <ClassList
+                        classList={classList}
+                        changeLoading={changeLoading}
+                        init={init}
+                        handleCancel={this.handleCancel}
                     />
                 }
             </div>
@@ -128,8 +172,9 @@ let mapStateToAppProps = state => {
         classList: testState.classList,
         projectName: testState.projectName,
         searchFormData: testState.searchFormData,
+        pagination: testState.pagination,
     }
 };
 export default connect(mapStateToAppProps, {
-    addCommodity, delCommodity, updateCommodity, getCommodity,changeLoading,init,changeSearchFormData
+    addCommodity, delCommodity, updateCommodity, getCommodity, changeLoading, init, changeSearchFormData
 })(Commodity);

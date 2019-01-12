@@ -5,9 +5,9 @@ import 'isomorphic-fetch'
 import {fetchData} from '../utils/fetchServe'
 
 export const CHANGE_LOADING = 'CHANGE_LOADING';
-export const ADD = 'ADD';
-export const DEL = 'DEL';
-export const UPDATE = 'UPDATE';
+export const COMMODITY_ADD = 'COMMODITY_ADD';
+export const COMMODITY_DEL = 'COMMODITY_DEL';
+export const COMMODITY_UPDATE = 'COMMODITY_UPDATE';
 export const COMMODITY_GET_DATA_LIST = 'COMMODITY_GET_DATA_LIST';
 export const COMMODITY_GET_CLASS_DATA = 'COMMODITY_GET_CLASS_DATA';
 export const COMMODITY_CHANGE_SEARCH_FORM_DATA = 'COMMODITY_CHANGE_SEARCH_FORM_DATA';
@@ -17,7 +17,7 @@ export function changeLoading(flag, pageNum, pageSize) {
         type: CHANGE_LOADING,
         flag,
         pageNum: pageNum || 1,
-        pageSize: pageSize || 10
+        pageSize: pageSize || 20
     }
 }
 

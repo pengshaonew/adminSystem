@@ -2,33 +2,43 @@
  * Created by zsp on 2018/1/8.
  */
 import {
-    ADD,
-    DEL,
-    UPDATE,
+    COMMODITY_ADD,
+    COMMODITY_DEL,
+    COMMODITY_UPDATE,
     COMMODITY_GET_DATA_LIST,
     COMMODITY_GET_CLASS_DATA,
     CHANGE_LOADING,
     COMMODITY_CHANGE_SEARCH_FORM_DATA,
 } from '../../action/commodityAction'
+
 let initState = {
     loading: false,
-    searchFormData:{},
+    searchFormData: {},
     dataList: [],
-    classList:[],
-    projectName:""
+    classList: [],
+    projectName: "",
+    pagination: {
+        current: 0,
+        total: 0,
+        pageSize: 10,
+        pageSizeOptions: ['10', '20', '50', '100'],
+    },
 };
+
 export function commodity(state = initState, action) {
-    let {type,data} = action;
+    let {type, data} = action;
     switch (type) {
         case CHANGE_LOADING:
-            return {...state,loading:true};
-        case ADD:
+            state.pagination.current = action.pageNum;
+            state.pagination.pageSize = action.pageSize;
+            return {...state, loading: true};
+        case COMMODITY_ADD:
             return {...state, dataList: [...state.dataList, data], loading: false};
-        case DEL:
+        case COMMODITY_DEL:
             let delCommodity = state.dataList;
             delCommodity = delCommodity.filter(item => item.id !== data.id);
             return {...state, dataList: [...delCommodity], loading: false};
-        case UPDATE:
+        case COMMODITY_UPDATE:
             let dataListNew = state.dataList;
             dataListNew = dataListNew.map(item => {
                 if (item.id === data.id) {
@@ -38,18 +48,22 @@ export function commodity(state = initState, action) {
             });
             return {...state, dataList: [...dataListNew], loading: false};
         case COMMODITY_GET_DATA_LIST:
-            return {...state, dataList: [...data], loading: false};
+            let {pagination} = state;
+            pagination.current = data.pageNum;
+            pagination.pageSize = data.pageSize;
+            pagination.total = data.total;
+            return {...state, dataList: data.list, loading: false};
         case COMMODITY_GET_CLASS_DATA:
-            return {...state, classList: data.classList,projectName:data.projectName, loading: false};
+            return {...state, classList: data.classList, projectName: data.projectName, loading: false};
         case COMMODITY_CHANGE_SEARCH_FORM_DATA:
             let fields = action.fields;
             let searchFormData = state.searchFormData;
             for (let key in fields) {
                 if (fields.hasOwnProperty(key)) {
-                    searchFormData[key]= fields[key].value;
+                    searchFormData[key] = fields[key].value;
                 }
             }
-            return {...state,searchFormData};
+            return {...state, searchFormData};
         default:
             return state;
     }
