@@ -121,7 +121,7 @@ class Commodity extends React.Component {
         };
         return (
             <div className={'box'} style={{padding:20}}>
-                <h4 style={{height:60,lineHeight:'60px',marginLeft:'20px',fontSize:'24px'}}>项目名称：{projectName}</h4>
+                <h4 style={{minHeight:60,lineHeight:'60px',marginLeft:'20px',fontSize:'24px'}}>项目名称：{projectName}</h4>
                 <Spin spinning={loading}>
                     {/*<CommoditySearchForm
                         classList={classList}
