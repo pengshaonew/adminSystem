@@ -1,6 +1,7 @@
 
+export const chinaRailway='/chinaRailway';
 export function fetchData(url,params){
-    return fetch(url, {
+    return fetch(chinaRailway+url, {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

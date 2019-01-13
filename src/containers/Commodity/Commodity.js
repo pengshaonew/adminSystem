@@ -8,7 +8,7 @@ import AddCommodity from "../../component/commodity/AddCommodity";
 import CommoditySearchForm from "../../component/commodity/CommoditySearchForm";
 import './Commodity.less'
 import ClassList from "../../component/commodity/ClassList";
-import QRCode from 'qrcode.react';
+// import QRCode from 'qrcode.react';
 
 class Commodity extends React.Component {
     constructor() {
@@ -30,9 +30,9 @@ class Commodity extends React.Component {
                     render(text, record) {
                         return (
                             <span>
-                                 <Popover content={<QRCode className={'QRCode'} value="http://facebook.github.io/react/" size={200}/>} trigger="click">
+                                 {/*<Popover content={<QRCode className={'QRCode'} value="http://www.baidu.com" size={200}/>} trigger="click">
                                       <a>查看二维码</a>
-                                 </Popover>
+                                 </Popover>*/}
                                 <Divider type="vertical"/>
                                 <a onClick={_this.handleUpdate.bind(null, record)}>修改</a>
                                 <Divider type="vertical"/>

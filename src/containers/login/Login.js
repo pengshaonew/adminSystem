@@ -22,7 +22,7 @@ class Login extends React.Component {
             fetchData(`/login`, values).then(res => {
                 if(res && res.flag){
                     this.props.history.push({
-                        pathname: '/commodity'
+                        pathname: '/bridge/commodity'
                     });
                 }else{
                     this.setState({
@@ -48,8 +48,8 @@ class Login extends React.Component {
             alignItems:'center',
             justifyContent:'center'
         }}>
-            <Form style={{width: 400,background:'#fff',borderRadius:'5px',
-                padding:'50px 0'}}>
+            <Form style={{width: 360,background:'#fff',borderRadius:'5px',
+                padding:'50px 20px'}}>
                 {
                     err && <div style={{color:'#f00',fontSize:'12px',marginLeft:100}}>{err}</div>
                 }

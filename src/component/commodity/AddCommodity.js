@@ -82,7 +82,7 @@ class AddCommodity extends React.Component {
         const self = this;
         const props = {
             accept:'image/*',
-            action: `/upload/commodityImg`,
+            action: `/chinaRailway/upload/commodityImg`,
             beforeUpload(file) {
                 const suffix = file.name.slice(file.name.lastIndexOf('.') + 1);
                 const isTYPE = typeCode.includes(suffix);

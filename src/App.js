@@ -10,7 +10,7 @@ export default class App extends Component {
                 <div style={{height:"100%"}}>
                     <Switch>
                         <Route exact path="/" component={Login} />
-                        <Route path="/commodity" component={Commodity} />
+                        <Route path="/bridge/commodity" component={Commodity} />
                     </Switch>
                 </div>
             </Router>
