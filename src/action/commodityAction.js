@@ -31,6 +31,7 @@ export function init() {
         })
     }
 }
+
 export function getCommodity(params) {
     return dispatch => {
         fetchData(`/commodity/commodityList`, params).then(res => {

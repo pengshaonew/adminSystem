@@ -1,7 +1,10 @@
 import React from 'react';
 import {Form, Input, Button} from 'antd';
-import {fetchData} from '../../utils/fetchServe';
 import loginbg from '../../image/loginbg.jpg';
+import {connect} from 'react-redux';
+import {
+    login
+} from '../../action/loginAction'
 
 const FormItem = Form.Item;
 const createForm = Form.create;
@@ -19,17 +22,7 @@ class Login extends React.Component {
             if (!!errors) {
                 return;
             }
-            fetchData(`/login`, values).then(res => {
-                if(res && res.flag){
-                    this.props.history.push({
-                        pathname: '/bridge/commodity'
-                    });
-                }else{
-                    this.setState({
-                        err: res && res.message
-                    })
-                }
-            });
+            this.props.login(values);
         });
     };
 
@@ -76,4 +69,11 @@ class Login extends React.Component {
     }
 }
 
-export default createForm({})(Login);
+let mapStateToAppProps = state => {
+    let testState = state.login;
+    return {}
+};
+
+Login=createForm({})(Login);
+
+export default connect(mapStateToAppProps, {login})(Login);

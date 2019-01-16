@@ -1,6 +1,4 @@
-/**
- * Created by zsp on 2018/1/8.
- */
+
 import {
     COMMODITY_ADD,
     COMMODITY_DEL,
