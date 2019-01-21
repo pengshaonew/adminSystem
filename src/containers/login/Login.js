@@ -54,7 +54,7 @@ class Login extends React.Component {
             <Form style={{width: 360,background:'#fff',borderRadius:'5px',
                 padding:'50px 20px'}}>
                 {
-                    err && <div style={{color:'#f00',fontSize:'12px',marginLeft:100}}>{err}</div>
+                    err && <div style={{color:'#f00',fontSize:'12px',marginLeft:80}}>{err}</div>
                 }
                 <FormItem {...formItemLayout} label="账号">
                     {getFieldDecorator('account', {
