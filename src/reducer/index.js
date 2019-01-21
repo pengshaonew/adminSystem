@@ -4,8 +4,11 @@
 import {combineReducers, applyMiddleware, createStore} from 'redux'
 import thunk from 'redux-thunk'
 import {commodity} from './commodity/commodity'
+import {login} from './login/login'
+
 let store = createStore(combineReducers({
-   commodity
+    login,
+    commodity,
 }), applyMiddleware(thunk));
 window.store = store;
 export default store;

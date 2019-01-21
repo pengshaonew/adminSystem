@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {
     login
 } from '../../action/loginAction'
+import history from "../../history";
 
 const FormItem = Form.Item;
 const createForm = Form.create;
@@ -14,6 +15,15 @@ class Login extends React.Component {
         super();
         this.state={
             err:''
+        }
+    }
+
+    componentWillReceiveProps(newProps){
+        let {userId}=newProps;
+        if(userId && userId !== this.props.userId){
+            history.push({
+                pathname:'/bridge/commodity'
+            })
         }
     }
 
@@ -71,7 +81,9 @@ class Login extends React.Component {
 
 let mapStateToAppProps = state => {
     let testState = state.login;
-    return {}
+    return {
+        userId:testState.get('userId')
+    }
 };
 
 Login=createForm({})(Login);

@@ -122,5 +122,5 @@
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2"
   },
-  "proxy": "localhost:3005"
+  "proxy": "http://localhost:3005"
 }

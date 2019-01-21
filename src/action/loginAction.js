@@ -1,7 +1,6 @@
 
 import {fetchData} from '../utils/fetchServe'
 import {notification} from "antd";
-import history from '../history';
 
 export const LOGIN_SUCC = 'LOGIN_SUCC';
 
@@ -14,9 +13,6 @@ export function login(params) {
                     type: LOGIN_SUCC,
                     data: res.data
                 });
-                history.push({
-                    pathname:'/bridge/commodity'
-                })
             }else{
                 notification.warning({
                     message: '登录消息',

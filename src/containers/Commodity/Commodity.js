@@ -9,6 +9,7 @@ import CommoditySearchForm from "../../component/commodity/CommoditySearchForm";
 import './Commodity.less'
 import ClassList from "../../component/commodity/ClassList";
 import QRCode from 'qrcode.react';
+import history from '../../history';
 
 class Commodity extends React.Component {
     constructor() {
@@ -62,7 +63,12 @@ class Commodity extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        let {loading, getCommodity, searchFormData, pagination} = newProps;
+        let {loading, getCommodity, searchFormData, pagination,userId} = newProps;
+        if(!userId){
+            history.push({
+                pathname:'/'
+            })
+        }
         if (loading && loading !== this.props.loading) {
             getCommodity({
                 pageNum: pagination.current,
@@ -173,6 +179,7 @@ let mapStateToAppProps = state => {
         projectName: testState.projectName,
         searchFormData: testState.searchFormData,
         pagination: testState.pagination,
+        userId: state.login.get('userId'),
     }
 };
 export default connect(mapStateToAppProps, {
