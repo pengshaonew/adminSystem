@@ -11,7 +11,7 @@ class CommoditySearchForm extends React.Component {
     handleSubmit=(e)=> {
         e.preventDefault();
         this.props.changeLoading(true);
-    }
+    };
 
     render() {
         const {getFieldDecorator} = this.props.form;
@@ -28,7 +28,7 @@ class CommoditySearchForm extends React.Component {
                             {getFieldDecorator('classId')(
                                 <Select placeholder="请选择分类" allowClear={true}>
                                     {
-                                        classList.map(opt => {
+                                        classList.toJS().map(opt => {
                                             return (<Option key={opt.id + ''}
                                                             value={opt.id + ''}>
                                                 {opt.name}</Option>);
@@ -55,11 +55,9 @@ CommoditySearchForm = createForm({
     mapPropsToFields: (props) => {
         const {searchFormData} = props;
         let defaultFormValues = {};
-        for(var key in searchFormData){
-            defaultFormValues[key] = Form.createFormField({
-                value:searchFormData[key]
-            })
-        }
+        searchFormData.map((value, key) => {
+            return defaultFormValues[key] = Form.createFormField({value: value});
+        });
         return defaultFormValues;
     }
 })(CommoditySearchForm);

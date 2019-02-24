@@ -22,7 +22,7 @@ class AddCommodity extends React.Component {
         let {updateRecord} = this.props;
         if (updateRecord) {
             let values = {
-                parentId:updateRecord.parentId,
+                parentId: updateRecord.parentId,
                 name: updateRecord.name,
             };
             this.setState({imgUrl: updateRecord.imgUrl});
@@ -34,10 +34,10 @@ class AddCommodity extends React.Component {
         this.props.form.validateFields(
             (err, values) => {
                 if (!err) {
-                    let {add, update, updateRecord, handleCancel,classList} = this.props;
+                    let {add, update, updateRecord, handleCancel, classList} = this.props;
                     values.createDate = new Date().toLocaleDateString().replace(/\//g, "-");
-                    values.parentName = classList.find(item=>item.id==values.parentId).name;
-                    values.imgUrl=this.state.imgUrl;
+                    values.parentName = classList.find(item => item.get('id')+'' === values.parentId+'').get('name');
+                    values.imgUrl = this.state.imgUrl;
                     if (updateRecord) {
                         values.id = updateRecord.id;
                         update(values);
@@ -56,7 +56,7 @@ class AddCommodity extends React.Component {
         if (!value) {
             callback();
         } else {
-            if (!(/^[\w|\u4e00-\u9fa5]+$/.test(value))) {
+            if (false) {
                 callback(new Error('名称必须是由数字、字母、下划线或文字组成'));
             } else {
                 let {updateRecord} = this.props;
@@ -81,7 +81,7 @@ class AddCommodity extends React.Component {
         const typeCode = ['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'];
         const self = this;
         const props = {
-            accept:'image/*',
+            accept: 'image/*',
             action: `/chinaRailway/upload/commodityImg`,
             beforeUpload(file) {
                 const suffix = file.name.slice(file.name.lastIndexOf('.') + 1);
@@ -172,7 +172,7 @@ class AddCommodity extends React.Component {
                                 })(
                                     <Select placeholder="请选择分类" allowClear={true}>
                                         {
-                                            classList.map(opt => {
+                                            classList.toJS().map(opt => {
                                                 return (<Option key={opt.id + ''}
                                                                 value={opt.id + ''}>
                                                     {opt.name}</Option>);

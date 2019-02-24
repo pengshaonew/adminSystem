@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import {Table, Spin, Popconfirm, Button, Divider, Popover} from 'antd'
+import {Table, Spin, Popconfirm, Button, Divider, Popover} from 'antd';
 import {
     addCommodity, delCommodity, updateCommodity, getCommodity, changeLoading, init, changeSearchFormData
 } from '../../action/commodityAction'
@@ -56,9 +56,9 @@ class Commodity extends React.Component {
         let {getCommodity, init, searchFormData, pagination} = this.props;
         init();
         getCommodity({
-            pageNum: pagination.current,
-            pageSize: pagination.pageSize,
-            ...searchFormData
+            pageNum: pagination.get('current'),
+            pageSize: pagination.get('pageSize'),
+            ...searchFormData.toJS()
         });
     }
 
@@ -71,9 +71,9 @@ class Commodity extends React.Component {
         }
         if (loading && loading !== this.props.loading) {
             getCommodity({
-                pageNum: pagination.current,
-                pageSize: pagination.pageSize,
-                ...searchFormData
+                pageNum: pagination.get('current'),
+                pageSize: pagination.get('pageSize'),
+                ...searchFormData.toJS()
             });
         }
     }
@@ -129,19 +129,19 @@ class Commodity extends React.Component {
             <div className={'box'} style={{padding:20}}>
                 <h4 style={{minHeight:60,lineHeight:'60px',marginLeft:'20px',fontSize:'24px'}}>项目名称：{projectName}</h4>
                 <Spin spinning={loading}>
-                    {/*<CommoditySearchForm
+                    <CommoditySearchForm
                         classList={classList}
                         changeLoading={changeLoading}
                         searchFormData={searchFormData}
                         changeSearchFormData={changeSearchFormData}
-                    />*/}
+                    />
                     <Table
                         size="small"
                         rowKey={record => record.id}
                         title={title}
                         columns={this.state.columns}
-                        dataSource={dataList}
-                        pagination={pagination}
+                        dataSource={dataList.toJS()}
+                        pagination={pagination.toJS()}
                         onChange={this.handleChangePage}
                         rowClassName={this.setRowClassName}
                     />
@@ -173,12 +173,12 @@ class Commodity extends React.Component {
 let mapStateToAppProps = state => {
     let testState = state.commodity;
     return {
-        loading: testState.loading,
-        dataList: testState.dataList,
-        classList: testState.classList,
-        projectName: testState.projectName,
-        searchFormData: testState.searchFormData,
-        pagination: testState.pagination,
+        loading: testState.get('loading'),
+        dataList: testState.get('dataList'),
+        classList: testState.get('classList'),
+        projectName: testState.get('projectName'),
+        searchFormData: testState.get('searchFormData'),
+        pagination: testState.get('pagination'),
         userId: state.login.get('userId'),
     }
 };

@@ -1,4 +1,4 @@
-
+import {fromJS} from 'immutable';
 import {
     COMMODITY_ADD,
     COMMODITY_DEL,
@@ -9,7 +9,7 @@ import {
     COMMODITY_CHANGE_SEARCH_FORM_DATA,
 } from '../../action/commodityAction'
 
-let initState = {
+let initState = fromJS({
     loading: false,
     searchFormData: {},
     dataList: [],
@@ -21,47 +21,42 @@ let initState = {
         pageSize: 10,
         pageSizeOptions: ['10', '20', '50', '100'],
     },
-};
+});
 
 export function commodity(state = initState, action) {
     let {type, data} = action;
     switch (type) {
         case CHANGE_LOADING:
-            state.pagination.current = action.pageNum;
-            state.pagination.pageSize = action.pageSize;
-            return {...state, loading: true};
-        case COMMODITY_ADD:
-            return {...state, dataList: [...state.dataList, data], loading: false};
-        case COMMODITY_DEL:
-            let delCommodity = state.dataList;
-            delCommodity = delCommodity.filter(item => item.id !== data.id);
-            return {...state, dataList: [...delCommodity], loading: false};
-        case COMMODITY_UPDATE:
-            let dataListNew = state.dataList;
-            dataListNew = dataListNew.map(item => {
-                if (item.id === data.id) {
-                    item.name = data.name;
-                }
-                return item;
-            });
-            return {...state, dataList: [...dataListNew], loading: false};
+            let loadingState = state;
+            loadingState = loadingState.set('loading', action.flag);
+            if (action.pageSize) {
+                loadingState = loadingState.setIn(['pagination', 'current'], action.current);
+                loadingState = loadingState.setIn(['pagination', 'pageSize'], action.pageSize);
+            }
+            return loadingState;
         case COMMODITY_GET_DATA_LIST:
-            let {pagination} = state;
-            pagination.current = data.pageNum;
-            pagination.pageSize = data.pageSize;
-            pagination.total = data.total;
-            return {...state, dataList: data.list, loading: false};
+            let queryState = state;
+            queryState = queryState.set('loading', false);
+            queryState = queryState.set('dataList', fromJS(data.list));
+            queryState = queryState.setIn(['pagination', 'current'], data.pageNum);
+            queryState = queryState.setIn(['pagination', 'pageSize'], data.pageSize);
+            queryState = queryState.setIn(['pagination', 'total'], data.total);
+            return queryState;
         case COMMODITY_GET_CLASS_DATA:
-            return {...state, classList: data.classList, projectName: data.projectName, loading: false};
+            let classState = state;
+            classState = classState.set('loading', false);
+            classState = classState.set('classList', fromJS(data.classList));
+            classState = classState.set('projectName', fromJS(data.projectName));
+            return classState;
         case COMMODITY_CHANGE_SEARCH_FORM_DATA:
             let fields = action.fields;
-            let searchFormData = state.searchFormData;
+            let formState = state;
             for (let key in fields) {
                 if (fields.hasOwnProperty(key)) {
-                    searchFormData[key] = fields[key].value;
+                    formState = formState.setIn(['searchFormData', key], fields[key].value);
                 }
             }
-            return {...state, searchFormData};
+            return formState;
         default:
             return state;
     }

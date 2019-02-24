@@ -17,7 +17,7 @@ export function changeLoading(flag, pageNum, pageSize) {
         type: CHANGE_LOADING,
         flag,
         pageNum: pageNum || 1,
-        pageSize: pageSize || 20
+        pageSize: pageSize || 10
     }
 }
 
