@@ -3,7 +3,10 @@ import {connect} from 'react-redux'
 import {Table, Spin, Popconfirm, Button, Divider, Popover} from 'antd';
 import {
     addCommodity, delCommodity, updateCommodity, getCommodity, changeLoading, init, changeSearchFormData
-} from '../../action/commodityAction'
+} from '../../action/commodityAction';
+import {
+    loginout
+} from '../../action/loginAction';
 import AddCommodity from "../../component/commodity/AddCommodity";
 import CommoditySearchForm from "../../component/commodity/CommoditySearchForm";
 import './Commodity.less'
@@ -116,7 +119,7 @@ class Commodity extends React.Component {
     render() {
         let {
             loading, projectName, classList, dataList, addCommodity, updateCommodity, changeLoading, searchFormData, changeSearchFormData,
-            pagination, init
+            pagination, init,loginout
         } = this.props;
         let title = () => {
             return <div>
@@ -127,7 +130,10 @@ class Commodity extends React.Component {
         };
         return (
             <div className={'box'} style={{padding:20}}>
-                <h4 style={{minHeight:60,lineHeight:'60px',marginLeft:'20px',fontSize:'24px'}}>项目名称：{projectName}</h4>
+                <h4 style={{minHeight:60,lineHeight:'60px',marginLeft:'20px',fontSize:'24px'}}>
+                    项目名称：{projectName}
+                    <a onClick={loginout} style={{fontSize:'16px',float:'right'}}>退出</a>
+                </h4>
                 <Spin spinning={loading}>
                     <CommoditySearchForm
                         classList={classList}
@@ -183,5 +189,6 @@ let mapStateToAppProps = state => {
     }
 };
 export default connect(mapStateToAppProps, {
-    addCommodity, delCommodity, updateCommodity, getCommodity, changeLoading, init, changeSearchFormData
+    addCommodity, delCommodity, updateCommodity, getCommodity, changeLoading, init, changeSearchFormData,
+    loginout
 })(Commodity);
