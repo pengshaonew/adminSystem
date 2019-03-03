@@ -24,7 +24,16 @@ export function login(params) {
     }
 }
 export function loginout() {
-    return{
-        type:LOGIN_OUT_SUCC
+    return dispatch => {
+        fetchData(`/loginOut`).then(res => {
+            if(res.data){
+
+            }else{
+                notification.warning({
+                    message: '登录消息',
+                    description: '登录失败',
+                });
+            }
+        })
     }
 }

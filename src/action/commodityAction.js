@@ -12,12 +12,12 @@ export const COMMODITY_GET_DATA_LIST = 'COMMODITY_GET_DATA_LIST';
 export const COMMODITY_GET_CLASS_DATA = 'COMMODITY_GET_CLASS_DATA';
 export const COMMODITY_CHANGE_SEARCH_FORM_DATA = 'COMMODITY_CHANGE_SEARCH_FORM_DATA';
 
-export function changeLoading(flag, pageNum, pageSize) {
+export function changeLoading(flag, current, pageSize) {
     return {
         type: CHANGE_LOADING,
         flag,
-        pageNum: pageNum || 1,
-        pageSize: pageSize || 10
+        current: current,
+        pageSize: pageSize
     }
 }
 

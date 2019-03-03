@@ -67,11 +67,6 @@ class Commodity extends React.Component {
 
     componentWillReceiveProps(newProps) {
         let {loading, getCommodity, searchFormData, pagination,userId} = newProps;
-        if(!userId){
-            history.push({
-                pathname:'/'
-            })
-        }
         if (loading && loading !== this.props.loading) {
             getCommodity({
                 pageNum: pagination.get('current'),
