@@ -86,7 +86,9 @@ class Commodity extends React.Component {
             isAddCommodity: false,
             isClassList: false,
             updateRecord: false
-        })
+        });
+        let {changeLoading} = this.props;
+        changeLoading(true);
     };
 
     handleUpdate = record => {

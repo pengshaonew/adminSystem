@@ -21,12 +21,8 @@ class AddCommodity extends React.Component {
     initForm = () => {
         let {updateRecord} = this.props;
         if (updateRecord) {
-            let values = {
-                parentId: updateRecord.parentId,
-                name: updateRecord.name,
-            };
             this.setState({imgUrl: updateRecord.imgUrl});
-            this.props.form.setFieldsValue(values);
+            this.props.form.setFieldsValue(updateRecord);
         }
     };
 
@@ -35,7 +31,9 @@ class AddCommodity extends React.Component {
             (err, values) => {
                 if (!err) {
                     let {add, update, updateRecord, handleCancel, classList} = this.props;
-                    values.createDate = new Date().toLocaleDateString().replace(/\//g, "-");
+                    values.createDate = new Date().toLocaleDateString().replace(/(\d+)[-/](\d+)[-/](\d+)/,function(){
+                        return arguments[1]+"-"+(arguments[2]<10?"0"+arguments[2]:arguments[2])+"-"+(arguments[3]<10?"0"+arguments[3]:arguments[3]);
+                    });
                     values.parentName = classList.find(item => item.get('id')+'' === values.parentId+'').get('name');
                     values.imgUrl = this.state.imgUrl;
                     if (updateRecord) {
@@ -150,7 +148,7 @@ class AddCommodity extends React.Component {
         } = this.props;
         const formItemLayout = {
             labelCol: {span: 8},
-            wrapperCol: {span: 10}
+            wrapperCol: {span: 14}
         };
         let title = updateRecord ? '修改构件' : '新增构件';
 
@@ -165,7 +163,7 @@ class AddCommodity extends React.Component {
             >
                 <Form>
                     <Row>
-                        <Col sm={6}>
+                        <Col sm={8}>
                             <FormItem label='所属分类' {...formItemLayout}>
                                 {getFieldDecorator('parentId', {
                                     rules: [{required: true, message: '请选择分类'}],
@@ -182,7 +180,7 @@ class AddCommodity extends React.Component {
                                 )}
                             </FormItem>
                         </Col>
-                        <Col sm={6}>
+                        <Col sm={8}>
                             <FormItem {...formItemLayout} label="构件名称">
                                 {getFieldDecorator('name', {
                                     rules: [{required: true, message: '请输入构件名称'},
@@ -192,7 +190,182 @@ class AddCommodity extends React.Component {
                                 )}
                             </FormItem>
                         </Col>
-                        <Col sm={6}>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="构件尺寸">
+                                {getFieldDecorator('size')(
+                                    <Input placeholder="请输入构件尺寸"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="ZZL1">
+                                {getFieldDecorator('ZZL1')(
+                                    <Input placeholder="请输入ZZL1"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="构件重量">
+                                {getFieldDecorator('weight')(
+                                    <Input placeholder="请输入构件重量"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="构件板厚">
+                                {getFieldDecorator('thickness')(
+                                    <Input placeholder="请输入构件板厚"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="构件长度">
+                                {getFieldDecorator('length')(
+                                    <Input placeholder="请输入构件长度"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="构件宽度">
+                                {getFieldDecorator('width')(
+                                    <Input placeholder="请输入构件宽度"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="构件高度">
+                                {getFieldDecorator('height')(
+                                    <Input placeholder="请输入构件高度"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="下料">
+                                {getFieldDecorator('blanking')(
+                                    <Input placeholder="请输入下料信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="钢板信息">
+                                {getFieldDecorator('steelPlate')(
+                                    <Input placeholder="请输入钢板信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="单元件合格情况">
+                                {getFieldDecorator('singleElement')(
+                                    <Input placeholder="请输入单元件合格情况"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="组装">
+                                {getFieldDecorator('assemble')(
+                                    <Input placeholder="请输入组装信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="构件焊缝">
+                                {getFieldDecorator('weldLine')(
+                                    <Input placeholder="请输入构件焊缝信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="焊接方法">
+                                {getFieldDecorator('weldingMethod')(
+                                    <Input placeholder="请输入焊接方法信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="焊工信息">
+                                {getFieldDecorator('welderInfo')(
+                                    <Input placeholder="请输入焊工信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="焊缝检测方法">
+                                {getFieldDecorator('testMethod')(
+                                    <Input placeholder="请输入焊缝检测方法"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="焊缝检测人员信息">
+                                {getFieldDecorator('testingPersonnelInfo')(
+                                    <Input placeholder="请输入焊缝检测人员信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="焊缝合格情况">
+                                {getFieldDecorator('qualification')(
+                                    <Input placeholder="请输入焊缝合格情况"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="姓名证件号">
+                                {getFieldDecorator('idNum')(
+                                    <Input placeholder="请输入姓名证件号"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="涂装情况">
+                                {getFieldDecorator('paintingSituation')(
+                                    <Input placeholder="请输入涂装情况"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="涂装人员信息">
+                                {getFieldDecorator('coatingPersonnel')(
+                                    <Input placeholder="请输入涂装人员信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="漆膜厚度检测">
+                                {getFieldDecorator('qmhdjc')(
+                                    <Input placeholder="请输入漆膜厚度检测"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="底中面">
+                                {getFieldDecorator('dzm')(
+                                    <Input placeholder="请输入底中面信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="制孔">
+                                {getFieldDecorator('zhikong')(
+                                    <Input placeholder="请输入制孔信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="制孔设备">
+                                {getFieldDecorator('zksb')(
+                                    <Input placeholder="请输入制孔设备信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
+                            <FormItem {...formItemLayout} label="制孔人员信息">
+                                {getFieldDecorator('zkryxx')(
+                                    <Input placeholder="请输入制孔人员信息"/>
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col sm={8}>
                             <FormItem {...formItemLayout} label="构件进度图片">
                                 <Upload {...this.propsFun()}><a>开始上传</a></Upload>&nbsp;
                                 {
@@ -203,10 +376,6 @@ class AddCommodity extends React.Component {
                                     </Popover>
                                 }
                             </FormItem>
-
-                        </Col>
-                        <Col sm={6}>
-
                         </Col>
                     </Row>
                 </Form>
