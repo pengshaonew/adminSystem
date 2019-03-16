@@ -34,7 +34,7 @@ class Commodity extends React.Component {
                     render(text, record) {
                         return (
                             <span>
-                                 <Popover content={<QRCode className={'QRCode'} value="http://www.baidu.com" size={200}/>} trigger="click">
+                                 <Popover content={<QRCode className={'QRCode'} value={`http://www.zhaoshaopeng.com/data/ChinaRailwayMobile/sparePartsDetails.html?id=${record.id}`} size={200}/>} trigger="click">
                                       <a>查看二维码</a>
                                  </Popover>
                                 <Divider type="vertical"/>
